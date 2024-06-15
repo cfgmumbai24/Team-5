@@ -5,12 +5,13 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    quantity: {
+    availability: {
         type: String,
         required: true,
     },
     category: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
         required: true
     },
     product_name: {
