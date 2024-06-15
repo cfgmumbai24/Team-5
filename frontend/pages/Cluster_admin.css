@@ -1,0 +1,58 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 20px;
+  }
+  
+  .sidebar {
+    width: 200px;  
+    padding: 10px;
+    background-color: #f0f0f0;
+    height: 100vh;
+  }
+  
+  .status-column {
+    margin-bottom: 20px;
+  }
+  
+  .status-column h3 {
+    margin-bottom: 10px;
+  }
+  
+  .pending-image img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+  }
+  
+  .upload-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+    justify-content: center;  
+    height: 100vh; 
+  }
+  
+  .upload-dropdown {
+    display: flex;  
+    align-items: center;  
+    margin-bottom: 20px;
+  }
+  
+  .upload-dropdown input[type="file"] {
+    margin-right: 20px;  
+  }
+  
+  .upload-message {
+    margin-top: 10px;
+    color: #007bff;
+    text-align: center;  
+  }
