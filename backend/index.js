@@ -11,8 +11,10 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 const authRouter = require('./routes/auth')
 const adminRouter = require('./routes/admin')
+const subadminRouter = require('./routes/subadmin')
 
 app.use('/auth',authRouter)
 app.use('/admin',adminRouter)
+app.use('/subadmin',subadminRouter)
 
 app.listen(process.env.PORT, () => { console.log(`Working On Port ${process.env.PORT}`) })

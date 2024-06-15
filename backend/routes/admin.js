@@ -102,6 +102,74 @@ router.get('/getProductscat', async (req, res) => {
     }
 });
 
+router.post('/deleteUser', async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        // Find the user by email and delete
+        const user = await Master.findOneAndDelete({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({ message: 'User deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.post('/editProduct', async (req, res) => {
+    const { sku, availability, category, product_name, photo, description, price, weight, approval_sub, approval_master } = req.body;
+
+    try {
+        // Find the product by SKU
+        const product = await Product.findOne({ sku });
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // Update only the fields provided in the request
+        const updatedFields = {};
+        if (availability !== undefined) updatedFields.availability = availability;
+        if (category !== undefined) updatedFields.category = category;
+        if (product_name !== undefined) updatedFields.product_name = product_name;
+        if (photo !== undefined) updatedFields.photo = photo;
+        if (description !== undefined) updatedFields.description = description;
+        if (price !== undefined) updatedFields.price = price;
+        if (weight !== undefined) updatedFields.weight = weight;
+        if (approval_sub !== undefined) updatedFields.approval_sub = approval_sub;
+        if (approval_master !== undefined) updatedFields.approval_master = approval_master;
+
+        await Product.updateOne({ sku }, { $set: updatedFields });
+
+        res.status(200).json({ message: 'Product updated successfully' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.post('/approveAdmin', async (req, res) => {
+    const { _id } = req.body;
+
+    try {
+        // Find the product by _id
+        const product = await Product.findById(_id);
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // Update approval_sub to true
+        product.approval_master = true;
+        await product.save();
+
+        res.status(200).json({ message: 'Product approval_master updated to true' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 
 module.exports = router;
