@@ -76,6 +76,15 @@ router.post('/addCategory', async (req, res) => {
     }
 });
 
+router.get('/getUser', async (req, res) => {
+    try {
+        const users = await Master.find();
+        res.status(200).json({ users });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 router.get('/getCategories', async (req, res) => {
     try {
         const categories = await Category.find();

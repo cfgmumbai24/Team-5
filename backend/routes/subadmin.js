@@ -49,4 +49,20 @@ router.post('/rejectSub', async (req, res) => {
     }
 });
 
+router.post('/getNamefromId', async (req, res) => {
+    const { _id } = req.body;
+
+    try {
+        const category = await Category.findById(_id);
+
+        if (!category) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+
+        res.status(200).json({ category });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 module.exports = router;

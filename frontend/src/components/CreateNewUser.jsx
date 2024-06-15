@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "./createNewUser.css";
 import Select from "react-select";
 
@@ -10,16 +11,28 @@ const CreateNewUser = ({ categories, closeForm }) => {
 
   const [newUser, setNewUser] = useState({
     name: "",
+    email: "",
     role: null,
     category: null,
     password: "",
   });
 
-  const handleUser = (e) => {
+  const handleUser = async (e) => {
     e.preventDefault();
-    console.log(newUser);
-    setNewUser({ name: "", role: null, category: null, password: "" });
-    closeForm();
+    try {
+      const response = await axios.post("http://127.0.0.1:8080/admin/register", {
+        name: newUser.name,
+        email: newUser.email,
+        role: newUser.role,
+        category: newUser.category,
+        password: newUser.password,
+      });
+      console.log(response.data);
+      setNewUser({ name: "", email: "", role: null, category: null, password: "" });
+      closeForm();
+    } catch (error) {
+      console.error("Error creating user", error);
+    }
   };
 
   return (
@@ -30,6 +43,13 @@ const CreateNewUser = ({ categories, closeForm }) => {
           placeholder="Name"
           value={newUser.name}
           onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Email"
+          value={newUser.email}
+          onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
           required
         />
 
@@ -50,25 +70,27 @@ const CreateNewUser = ({ categories, closeForm }) => {
             name="category"
             options={categories}
             classNamePrefix="select"
+            getOptionLabel={(option) => option.name}
+            getOptionValue={(option) => option.value}
             value={categories.find(
               (option) => option.value === newUser.category
             )}
             onChange={(selectedOption) =>
               setNewUser({
                 ...newUser,
-                category: selectedOption.label,
+                category: selectedOption.name,
               })
             }
           />
         )}
         <input
-          type="text"
+          type="password"
           placeholder="Password"
           value={newUser.password}
           onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
           required
         />
-        <button>Create</button>
+        <button type="submit">Create</button>
       </form>
     </div>
   );

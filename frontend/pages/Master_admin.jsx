@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import CreateNewUser from "../src/components/CreateNewUser";
 import "./master_admin.css";
 import Profile from "../src/components/Profile";
@@ -6,65 +7,11 @@ import UserCard from "../src/components/AllUser";
 import ProductCard from "../src/components/ProductCard";
 
 const Master_admin = () => {
-  const [categories, setCategories] = useState([
-    { value: 1, label: "A" },
-    { value: 2, label: "B" },
-    { value: 3, label: "C" },
-    { value: 4, label: "D" },
-    { value: 5, label: "E" },
-  ]);
-
-  const initialData = [
-    {
-      name: "One",
-      role: "Sub-Admin",
-      password: "123",
-    },
-    {
-      name: "Two",
-      role: "Sub-Admin",
-      password: "123",
-    },
-    {
-      name: "Three",
-      role: "Cluster",
-      category: "A",
-      password: "123",
-    },
-    {
-      name: "Four",
-      role: "Cluster",
-      category: "B",
-      password: "123",
-    },
-  ];
-
-  const initialProducts = [
-    {
-      name: "Diamond Necklace",
-      img: "../img.png",
-      description: "A beautiful diamond necklace."
-    },
-    {
-      name: "Gold Ring",
-      img: "../img.png",
-      description: "A classic gold ring."
-    },
-    {
-      name: "Silver Bracelet",
-      img: "../img.png",
-      description: "A stylish silver bracelet."
-    },
-    {
-      name: "Emerald Earrings",
-      img: "../img.png",
-      description: "Elegant emerald earrings."
-    }
-  ]
-
+  const [categories, setCategories] = useState([]);
+  const [categoriesWithNames, setCategoriesWithNames] = useState([]);
+  const [data, setData] = useState([]);
+  const [products, setProducts] = useState([]);
   const [inputValue, setInputValue] = useState("");
-  const [data, setData] = useState(initialData);
-  const [products, setProducts] = useState(initialProducts);
   const [showForm, setShowForm] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
   const [showUser, setShowUser] = useState(true);
@@ -72,27 +19,95 @@ const Master_admin = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [editedProduct, setEditedProduct] = useState(null);
 
+  useEffect(() => {
+    fetchCategories();
+    fetchUsers();
+    fetchProducts();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:8080/admin/getCategories');
+      setCategories(response.data.categories);
+      const categoriesWithNames = await Promise.all(
+        response.data.categories.map(async (category) => {
+          const name = await getCategoryNameById(category._id);
+          return {
+            ...category,
+            name: name || category.name,
+          };
+        })
+      );
+      setCategoriesWithNames(categoriesWithNames);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const getCategoryNameById = async (id) => {
+    try {
+      const response = await axios.post('http://127.0.0.1:8080/subadmin/getNamefromId', { _id: id });
+      return response.data.category.name;
+    } catch (error) {
+      console.error(`Error fetching category name for ID ${id}:`, error);
+      return null;
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:8080/admin/getUser');
+      setData(response.data.users);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:8080/admin/getProductsmaster');
+      const productsWithCategories = await Promise.all(
+        response.data.products.map(async (product) => {
+          const categoryName = await getCategoryNameById(product.category);
+          return {
+            ...product,
+            categoryName: categoryName || product.category,
+          };
+        })
+      );
+      setProducts(productsWithCategories);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
   const handleInputChange = (event) => {
     event.preventDefault();
     const newValue = event.target.value;
     setInputValue(newValue);
   };
 
-  const addCategory = () => {
+  const addCategory = async () => {
     if (inputValue.trim() !== "") {
-      const newCategory = {
-        value: categories[categories.length - 1].value + 1,
-        label: inputValue,
-      };
-      setCategories([...categories, newCategory]);
-      setInputValue("");
-      setShowCategory(false);
+      try {
+        await axios.post('http://127.0.0.1:8080/admin/addCategory', { name: inputValue });
+        setInputValue("");
+        setShowCategory(false);
+        fetchCategories();
+      } catch (error) {
+        console.error('Error adding category:', error);
+      }
     }
   };
 
-  const handleDelete = (e, el) => {
+  const handleDelete = async (e, el) => {
     e.preventDefault();
-    setData(data.filter((i) => i.name !== el.name));
+    try {
+      await axios.post('http://127.0.0.1:8080/admin/deleteUser', { email: el.email });
+      setData(data.filter((i) => i.email !== el.email));
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
   };
 
   const handleShowUser = () => {
@@ -105,21 +120,34 @@ const Master_admin = () => {
     setShowUser(false);
   };
 
-  const handleAccept = (index) => {
-    setProducts(products.filter((_, i) => i !== index));
+  const handleAccept = async (index) => {
+    const product = products[index];
+    try {
+      await axios.post('http://127.0.0.1:8080/admin/approveAdmin', { _id: product._id });
+      setProducts(products.filter((_, i) => i !== index));
+    } catch (error) {
+      console.error('Error accepting product:', error);
+    }
   };
 
-  const handleReject = (index) => {
-    setProducts(products.filter((_, i) => i !== index));
+  const handleReject = async (index) => {
+    const product = products[index];
+    try {
+      await axios.post('http://127.0.0.1:8080/admin/rejectAdmin', { _id: product._id });
+      setProducts(products.filter((_, i) => i !== index));
+    } catch (error) {
+      console.error('Error rejecting product:', error);
+    }
   };
 
-  const handleUpdate = () => {
-    setProducts(
-      products.map((product) =>
-        product.name === editedProduct.name ? editedProduct : product
-      )
-    );
-    setShowDetails(false);
+  const handleUpdate = async () => {
+    try {
+      await axios.post('http://127.0.0.1:8080/admin/editProduct', editedProduct);
+      setShowDetails(false);
+      fetchProducts();
+    } catch (error) {
+      console.error('Error updating product:', error);
+    }
   };
 
   const handleProductClick = (product) => {
@@ -154,11 +182,15 @@ const Master_admin = () => {
                       <img src={el.img} alt="img" />
                     </div>
                     <div className="card-data">
-                      <h1>Name: {el.name}</h1>
+                      <h1>Name: {el.product_name}</h1>
                       <p>Description: {el.description}</p>
+                      <p>SKU: {el.sku}</p>
+                      <p>Category: {el.categoryName}</p>
+                      <p>Price: {el.price}</p>
+                      <p>Weight: {el.weight}</p>
                     </div>
-                    <button className="accept" onClick={(e) => {e.stopPropagation(); handleAccept(i);}}>Accept</button>
-                    <button onClick={(e) => {e.stopPropagation(); handleReject(i);}}>Reject</button>
+                    <button className="accept" onClick={(e) => { e.stopPropagation(); handleAccept(i); }}>Accept</button>
+                    <button onClick={(e) => { e.stopPropagation(); handleReject(i); }}>Reject</button>
                   </div>
                 </div>
               ))}
@@ -183,48 +215,79 @@ const Master_admin = () => {
             <div className="category-input-container">
               <input
                 type="text"
-                placeholder="Add Category..."
+                placeholder="Enter category name"
                 value={inputValue}
                 onChange={handleInputChange}
               />
               <button onClick={addCategory}>Add Category</button>
             </div>
           )}
+          {showForm && (
+            <CreateNewUser onClose={() => setShowForm(false)} />
+          )}
+          {showDetails && editedProduct && (
+            <div className="edit-product-container">
+              <h2>Edit Product</h2>
+              <label>
+                Name:
+                <input
+                  type="text"
+                  name="product_name"
+                  value={editedProduct.product_name}
+                  onChange={handleEditInputChange}
+                />
+              </label>
+              <label>
+                Description:
+                <input
+                  type="text"
+                  name="description"
+                  value={editedProduct.description}
+                  onChange={handleEditInputChange}
+                />
+              </label>
+              <label>
+                SKU:
+                <input
+                  type="text"
+                  name="sku"
+                  value={editedProduct.sku}
+                  onChange={handleEditInputChange}
+                />
+              </label>
+              <label>
+                Category:
+                <input
+                  type="text"
+                  name="category"
+                  value={editedProduct.categoryName}
+                  onChange={handleEditInputChange}
+                />
+              </label>
+              <label>
+                Price:
+                <input
+                  type="number"
+                  name="price"
+                  value={editedProduct.price}
+                  onChange={handleEditInputChange}
+                />
+              </label>
+              <label>
+                Weight:
+                <input
+                  type="text"
+                  name="weight"
+                  value={editedProduct.weight}
+                  onChange={handleEditInputChange}
+                />
+              </label>
+              <button onClick={handleUpdate}>Save</button>
+              <button onClick={() => setShowDetails(false)}>Cancel</button>
+            </div>
+          )}
         </div>
       </div>
-      {showForm && (
-        <div className="overlay">
-          <CreateNewUser
-            categories={categories}
-            closeForm={() => setShowForm(false)}
-          />
-        </div>
-      )}
-      {showDetails && editedProduct && (
-        <div className="overlay">
-          <div className="details-modal">
-            <h2>Edit Product</h2>
-            <div className="img-container">
-              <img src={editedProduct.img} alt="img" />
-            </div>
-            <input
-              type="text"
-              name="name"
-              value={editedProduct.name}
-              onChange={handleEditInputChange}
-              placeholder="Name"
-            />
-            <textarea
-              name="description"
-              value={editedProduct.description}
-              onChange={handleEditInputChange}
-              placeholder="Description"
-            />
-            <button onClick={handleUpdate}>Save</button>
-            <button onClick={() => setShowDetails(false)}>Cancel</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
