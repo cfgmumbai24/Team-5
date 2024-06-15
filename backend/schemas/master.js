@@ -1,36 +1,31 @@
 const mongoose = require('mongoose');
 
 const masterSchema = new mongoose.Schema({
-    sku: {
+    name: {
         type: String,
         required: true
     },
-    quantity: {
+    email: {
         type: String,
         required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
     },
     category: {
         type: String,
         required: true
     },
-    product_name: {
+    role: {
         type: String,
         required: true
-    },
-    description: {
-        type: String,
-        required: true
-    },
-    price: {
-        type: String,
-        required: true
-    },
-    weight: {
-        type: Array,
-        required: false
     }
+
+
 });
 
-const Master = mongoose.model('Master', masterSchema);
+const master = mongoose.model('Admin', masterSchema);
 
-module.exports = Master;
+module.exports = master;

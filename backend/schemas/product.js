@@ -17,6 +17,10 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    photo: {
+        type: String,
+        required: true
+    },
     description: {
         type: String,
         required: true
@@ -26,9 +30,17 @@ const productSchema = new mongoose.Schema({
         required: true
     },
     weight: {
-        type: Array,
+        type: String,
         required: false
-    }
+    },
+    approval_sub: {
+        type: Boolean,
+        required: true
+    },
+    approval_master: {
+        type: Boolean,
+        required: true
+    },
 });
 
 const Product = mongoose.model('Product', productSchema);
