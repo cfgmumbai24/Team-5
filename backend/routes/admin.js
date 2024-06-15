@@ -5,6 +5,20 @@ const router = express.Router()
 require('dotenv').config()
 const Product = require('../schemas/product')
 const Category = require('../schemas/category')
+const multer = require('multer');
+const path = require('path');
+
+// Set up Multer storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  }
+});
+
+const upload = multer({ storage });
 
 router.get('/', (req, res) => {
     return res.send('Auth route')
@@ -194,5 +208,34 @@ router.post('/rejectAdmin', async (req, res) => {
     }
 });
 
+router.post('/upload-image', upload.single('photo'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+
+        const { availability, category, product_name } = req.body;
+        // Save the file path in the photo field
+        const file_path = `/uploads/${req.file.filename}`;
+
+        // Create a new product
+        const newProduct = new Product({
+            availability,
+            category,
+            product_name,
+            photo: req.file ? req.file.path : file_path,
+            approval_sub: "false",
+            approval_master: "false"
+        });
+
+        // Save the product to the database
+        await newProduct.save();
+        res.status(200).json({ message: 'Product created and image uploaded successfully', product: newProduct });
+    } catch (error) {
+        console.error('Error occurred:', error);  // Log the error details
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 module.exports = router;
+  
