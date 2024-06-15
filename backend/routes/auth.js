@@ -49,4 +49,10 @@ router.post('/login', async (req, res) => {
 })
 
 
+router.post('/mail', async (req, res) =>{
+
+
+
+})
+
 module.exports = router
