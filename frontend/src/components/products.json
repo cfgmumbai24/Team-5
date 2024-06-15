@@ -1,0 +1,49 @@
+[
+    {
+      "id": 1,
+      "name": "Product 1",
+      "category": "Electronics",
+      "price": "$100",
+      "image": "url-to-image-1",
+      "quantity": 0,
+      "availability" : 0
+      
+    },
+    {
+      "id": 2,
+      "name": "Product 2",
+      "category": "Clothing",
+      "price": "$50",
+      "image": "url-to-image-2",
+      "quantity": 0,
+      "availability" : 0
+    },
+    {
+      "id": 3,
+      "name": "Product 3",
+      "category": "Electronics",
+      "price": "$200",
+      "image": "url-to-image-3",
+      "quantity": 0,
+        "availability" : 2
+    },
+    {
+      "id": 4,
+      "name": "Product 4",
+      "category": "Books",
+      "price": "$10",
+      "image": "url-to-image-4",
+      "quantity": 0,
+      "availability" : 9
+    },
+    {
+      "id": 5,
+      "name": "Product 5",
+      "category": "Clothing",
+      "price": "$75",
+      "image": "url-to-image-5",
+      "quantity": 0,
+      "availability" : 9
+    }
+  ]
+  
