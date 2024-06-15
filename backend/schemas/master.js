@@ -19,7 +19,7 @@ const masterSchema = new mongoose.Schema({
         required: true
     },
     role: {
-        type: Array,
+        type: String,
         required: true
     }
 
