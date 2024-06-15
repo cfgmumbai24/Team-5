@@ -7,8 +7,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import About from '../pages/Buyer_folder/About';
 import Home from '../pages/Buyer_folder/Home';
 import Products from '../pages/Buyer_folder/Products';
-import Buyer from '../pages/Buyer';
+import Buyer from '../pages/buyer';
 import Cart from '../pages/Buyer_folder/Cart';
+import Master_admin from '../pages/Master_admin'
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
       <Route path='/buyer/products' element={<Products/>}></Route>   
       <Route path='/buyer/cart' element={<Cart/>}></Route>   
       
+      <Route path="admin" element={<Master_admin/>} />
     </Routes>
     </BrowserRouter>
   )

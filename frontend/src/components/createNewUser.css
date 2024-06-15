@@ -1,0 +1,53 @@
+/* Container for the form */
+.form-container {
+  position: fixed; /* Fixed position relative to the viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 1000; /* Ensure it appears above other content */
+}
+
+/* Style for the form */
+form {
+  background: white; /* White background for the form */
+  padding: 20px; /* Padding inside the form */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  display: flex;
+  flex-direction: column; /* Column layout */
+  width: 300px; /* Fixed width */
+  gap: 10px; /* Space between inputs */
+}
+
+/* Style for input fields */
+input[type="text"],
+input[type="password"] {
+  padding: 10px; /* Padding inside input fields */
+  border: 1px solid #ccc; /* Light grey border */
+  border-radius: 4px; /* Rounded corners */
+  font-size: 16px; /* Larger font size */
+  width: 100%; /* Full width */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+/* Style for the submit button */
+button {
+  padding: 10px 15px; /* Padding inside the button */
+  border: none; /* No border */
+  border-radius: 4px; /* Rounded corners */
+  background-color: #007bff; /* Blue background */
+  color: white; /* White text */
+  font-size: 16px; /* Larger font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+/* Button hover effect */
+button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}

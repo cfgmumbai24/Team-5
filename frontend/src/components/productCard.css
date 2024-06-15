@@ -1,0 +1,228 @@
+/* Container for the Master Admin component */
+.master-admin-container {
+    padding: 20px;
+    min-height: 100vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+  }
+  
+  /* Main container for the layout */
+  .main-container {
+    display: flex;
+    flex: 1; /* Ensure it takes full available width */
+  }
+  
+  .left-container {
+    width: 200px; /* Fixed width */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .right-container {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+  }
+  
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  /* Other styles */
+  
+  .create-user-button,
+  .create-category-button {
+    margin-bottom: 10px;
+  }
+  
+  .category-input-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .category-input-container input[type="text"] {
+    flex: 1;
+    margin-right: 10px;
+  }
+  
+  .category-input-container button {
+    padding: 5px 10px;
+  }
+  
+  /* Other styles */
+  
+  .profile-container {
+    margin-bottom: 20px;
+  }
+  
+  /* Style for the "Create User" button */
+  .create-user-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    font-size: 16px; /* Larger font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+  }
+  
+  /* Button hover effect */
+  .create-user-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  /* Container for the dashboard sections */
+  .dash-container {
+    width: 100%; /* Full width */
+    display: flex; /* Flex layout */
+    justify-content: space-around; /* Space between cards */
+    flex-wrap: wrap; /* Wrap items to the next line */
+    gap: 20px;
+    margin-top: 20px; /* Gap between sections */
+  }
+  
+  /* Container for the user and product cards */
+  .card-container {
+    width: 45%; /* Responsive width */
+    display: flex;
+    flex-direction: column; /* Column layout */
+    gap: 20px; /* Space between cards */
+  }
+  
+  /* Style for each user card */
+  .user-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px; /* Space between elements inside the card */
+  }
+  
+  .user-card h1 {
+    margin: 0 0 10px; /* Space below the name */
+    font-size: 20px; /* Larger font size */
+  }
+  
+  .user-card p {
+    margin: 5px 0; /* Space between paragraphs */
+    font-size: 16px; /* Larger font size */
+  }
+  
+  /* Style for the delete button */
+  .user-card button {
+    padding: 8px 12px; /* Padding inside the button */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    background-color: #ff4d4d; /* Red background */
+    color: white; /* White text */
+    font-size: 14px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+  }
+  
+  .user-card button:hover {
+    background-color: #cc0000; /* Darker red on hover */
+  }
+  
+  /* Container for the image */
+  .img-container {
+    width: 100px; /* Set a fixed width */
+    height: 100px; /* Set a fixed height */
+    border-radius: 50%; /* Make it a circle */
+    overflow: hidden; /* Ensure content doesn't overflow */
+    display: flex; /* Center the image */
+    align-items: center; /* Center the image vertically */
+    justify-content: center; /* Center the image horizontally */
+    background-color: #ccc; /* Optional: Set a background color */
+  }
+  
+  /* Ensure the image fits within the container */
+  .img-container img {
+    width: 100%; /* Scale the image to fit the container */
+    height: 100%; /* Scale the image to fit the container */
+    object-fit: cover; /* Cover the entire container */
+  }
+  
+  /* Additional styling for product card data */
+  .card-data {
+    flex: 1; /* Take up remaining space */
+  }
+  
+  .card-data h1 {
+    margin: 0 0 10px; /* Space below the name */
+    font-size: 20px; /* Larger font size */
+  }
+  
+  .card-data p {
+    margin: 5px 0; /* Space between paragraphs */
+    font-size: 16px; /* Larger font size */
+  }
+  
+  .user-card .accept {
+    background-color: #02470c;
+  }
+  
+  .user-card .accept:hover {
+    background-color: #09c725;
+  }
+  
+
+  /* productCard.css */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+  
+  .details-modal {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    gap: 10px;
+  }
+  
+  .details-modal input[type="text"],
+  .details-modal textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .details-modal button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .details-modal button:hover {
+    background-color: #0056b3;
+  }
+  
