@@ -23,7 +23,6 @@ const masterSchema = new mongoose.Schema({
         required: true
     }
 
-
 });
 
 const master = mongoose.model('Admin', masterSchema);

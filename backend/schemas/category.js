@@ -1,14 +1,13 @@
 const mongoose = require('mongoose');
 require('dotenv').config()
 
-// Replace with your actual MongoDB connection string
 const uri = process.env.ATLAS;
 
 const categorySchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        unique: true // Ensures that the category name is unique
+        unique: true 
     },
     product_id: {
         type: [mongoose.Schema.Types.ObjectId],
