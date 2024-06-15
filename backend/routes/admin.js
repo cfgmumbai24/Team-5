@@ -120,11 +120,11 @@ router.post('/deleteUser', async (req, res) => {
 });
 
 router.post('/editProduct', async (req, res) => {
-    const { sku, availability, category, product_name, photo, description, price, weight, approval_sub, approval_master } = req.body;
+    const { _id, sku, availability, category, product_name, photo, description, price, weight, approval_sub, approval_master } = req.body;
 
     try {
         // Find the product by SKU
-        const product = await Product.findOne({ sku });
+        const product = await Product.findOne({ _id });
 
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
@@ -132,6 +132,7 @@ router.post('/editProduct', async (req, res) => {
 
         // Update only the fields provided in the request
         const updatedFields = {};
+        if (sku !== undefined) updatedFields.sku = sku;
         if (availability !== undefined) updatedFields.availability = availability;
         if (category !== undefined) updatedFields.category = category;
         if (product_name !== undefined) updatedFields.product_name = product_name;
@@ -142,7 +143,7 @@ router.post('/editProduct', async (req, res) => {
         if (approval_sub !== undefined) updatedFields.approval_sub = approval_sub;
         if (approval_master !== undefined) updatedFields.approval_master = approval_master;
 
-        await Product.updateOne({ sku }, { $set: updatedFields });
+        await Product.updateOne({ _id }, { $set: updatedFields });
 
         res.status(200).json({ message: 'Product updated successfully' });
     } catch (err) {
@@ -187,7 +188,7 @@ router.post('/rejectAdmin', async (req, res) => {
         product.approval_master = false;
         await product.save();
 
-        res.status(200).json({ message: 'Product approval_master updated to true' });
+        res.status(200).json({ message: 'Product approval_master updated to false' });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
