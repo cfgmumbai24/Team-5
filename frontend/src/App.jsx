@@ -10,6 +10,8 @@ import Products from '../pages/Buyer_folder/Products';
 import Buyer from '../pages/buyer';
 import Cart from '../pages/Buyer_folder/Cart';
 import Master_admin from '../pages/Master_admin'
+import Login from '../pages/Login';
+
 
 function App() {
 
@@ -24,6 +26,8 @@ function App() {
       <Route path='/buyer/cart' element={<Cart/>}></Route>   
       
       <Route path="admin" element={<Master_admin/>} />
+      <Route path="admin/login" element={<Login />}/>
+
     </Routes>
     </BrowserRouter>
   )
