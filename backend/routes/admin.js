@@ -76,6 +76,15 @@ router.post('/addCategory', async (req, res) => {
     }
 });
 
+router.get('/getCategories', async (req, res) => {
+    try {
+        const categories = await Category.find();
+        res.status(200).json({ categories });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 router.post('/addProduct', async (req, res) => {
     const { sku, availability, category, product_name, photo, description, price, weight, approval_sub, approval_master } = req.body;
 
