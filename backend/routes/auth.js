@@ -1,6 +1,7 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
 const User = require('../schemas/user')
+const Product = require('../schemas/product')
 const router = express.Router()
 const nodemailer = require('nodemailer');
 require('dotenv').config()
@@ -72,17 +73,32 @@ async function sendEmail(email, quantity, sku, customerName, message) {
 }
 
 router.post('/mail', async (req, res) => {
-    const { email, quantity, sku, customerName, message } = req.body;
-  
+    const { _id, email, quantity, customerName, message } = req.body;
+
     try {
+        // Fetch the product from the database
+        const product = await Product.findById(_id);
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        // Check if the product has enough availability
+        if (product.availability < quantity) {
+            return res.status(400).json({ error: 'Insufficient product availability' });
+        }
+
+        // Reduce the product quantity
+        product.availability -= quantity;
+        await product.save();
+
         // Call the sendEmail function with the provided parameters
-        await sendEmail(email, quantity, sku, customerName, message);
-        res.status(200).json({ message: 'Email sent successfully' });
+        await sendEmail(email, quantity, customerName, message);
+
+        res.status(200).json({ message: 'Email sent successfully and product quantity updated' });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
-
 
 
 module.exports = router;
