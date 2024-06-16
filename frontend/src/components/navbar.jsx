@@ -30,7 +30,7 @@ function Navbar(props) {
       >
         <div className="container-fluid">
           <NavLink className="navbar-brand" to="/buyer">
-            Website_Name
+            J P M M S S
           </NavLink>
           <button
             className="navbar-toggler"

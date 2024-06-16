@@ -2,6 +2,7 @@
 
 .container-wrapper {
   padding: 20px;
+  display: flex;
 }
 
 .cart-items {
