@@ -1,0 +1,129 @@
+/* Resetting margins and paddings */
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+  }
+  
+  /* Centering the content */
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  /* Main article container */
+  #know-us-article {
+    width: 90%;
+    max-width: 1200px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin: 20px;
+  }
+  
+  /* Section header containers */
+  #about-us-heading, #vision-heading, #mission-heading, #faq-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 8px;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    margin-bottom: 20px;
+    font-size: 2em;
+    font-weight: bold;
+  }
+  
+  #about-us-heading { background-image: url('./aboutus2.jpg'); }
+  #vision-heading { background-image: url('./aboutus3.jpg'); }
+  #mission-heading { background-image: url('aboutus.jpeg'); }
+  #faq-heading { background-image: url('aboutus4.jpeg'); }
+  
+  /* Content sections */
+  .know-us-section {
+    margin-bottom: 40px;
+  }
+  
+  .know-us-section h2, .know-us-section h3 {
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .know-us-section h2 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+  }
+  
+  .know-us-section h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .know-us-section p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    #know-us-article {
+      width: 95%;
+    }
+  
+    #about-us-heading, #vision-heading, #mission-heading, #faq-heading {
+      height: 150px;
+    }
+  
+    .know-us-section h2, .know-us-section h3 {
+      font-size: 1.5em;
+    }
+  
+    .know-us-section p {
+      font-size: 1em;
+    }
+  }
+  
