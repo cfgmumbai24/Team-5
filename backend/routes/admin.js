@@ -1,4 +1,5 @@
 const express = require('express')
+const app = express();
 const bcrypt = require('bcrypt')
 const Master = require('../schemas/master')
 const router = express.Router()
@@ -7,11 +8,18 @@ const Product = require('../schemas/product')
 const Category = require('../schemas/category')
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
+const util = require('util');
+const sharp = require('sharp');
+const readFile = util.promisify(fs.readFile);
+
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Set up Multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    cb(null, './uploads/');
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`);
@@ -113,6 +121,36 @@ router.post('/addProduct', async (req, res) => {
         res.status(200).json({ message: 'Product added successfully' });
     } catch (err) {
         res.status(500).json({ error: err.message });
+    }
+});
+
+router.get('/getProducts', async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.status(200).json({ products });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.put('/updateProduct', async (req, res) => {
+    const { _id, product_name, description, qty, photo, weight } = req.body;
+    try {
+        const result = await Product.findByIdAndUpdate(_id, {
+            product_name,
+            description,
+            qty,
+            photo,
+            weight,
+        }, { new: true });
+
+        if (!result) {
+            return res.status(404).send('Product not found');
+        }
+
+        res.status(200).send(result);
+    } catch (error) {
+        res.status(500).send('Error updating product');
     }
 });
 
@@ -226,6 +264,7 @@ router.post('/rejectAdmin', async (req, res) => {
     }
 });
 
+
 router.post('/upload-image', upload.single('photo'), async (req, res) => {
     try {
         if (!req.file) {
@@ -233,21 +272,32 @@ router.post('/upload-image', upload.single('photo'), async (req, res) => {
         }
 
         const { availability, category, product_name } = req.body;
-        // Save the file path in the photo field
-        const file_path = `/uploads/${req.file.filename}`;
 
-        // Create a new product
+        // Read the file and compress it
+        const compressedBuffer = await sharp(req.file.path)
+            .resize(800, 800, {
+                fit: sharp.fit.inside,
+                withoutEnlargement: true
+            })
+            .toFormat('jpeg', { quality: 80 })
+            .toBuffer();
+
+        // Convert the compressed image to Base64
+        const base64String = compressedBuffer.toString('base64');
+
+        // Create a new product with the Base64 image
         const newProduct = new Product({
             availability,
             category,
             product_name,
-            photo: req.file ? req.file.path : file_path,
+            photo: base64String,
             approval_sub: "false",
             approval_master: "false"
         });
 
         // Save the product to the database
         await newProduct.save();
+
         res.status(200).json({ message: 'Product created and image uploaded successfully', product: newProduct });
     } catch (error) {
         console.error('Error occurred:', error);  // Log the error details
@@ -256,4 +306,3 @@ router.post('/upload-image', upload.single('photo'), async (req, res) => {
 });
 
 module.exports = router;
-  
