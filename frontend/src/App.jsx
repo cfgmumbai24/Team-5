@@ -10,7 +10,7 @@ import Cart from '../pages/Buyer_folder/Cart';
 import Master_admin from '../pages/Master_admin';
 import ImageUploader from '../pages/ImageUploader';
 import Login from '../pages/Login';
-import AuthForm from '../components/Authform';
+import AuthForm from './components/Authform';
 import Subadmin from '../pages/Subadmin';
 
 function App() {
