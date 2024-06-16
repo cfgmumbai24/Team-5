@@ -5,7 +5,6 @@ import './Cluster_admin.css';
 const ImageUploader = () => {
   const [image, setImage] = useState(null);
   const [selectedOption1, setSelectedOption1] = useState('');
-  const [selectedOption2, setSelectedOption2] = useState('');
   const [number, setNumber] = useState('');
   const [uploadMessage, setUploadMessage] = useState('');
   const [pendingImages, setPendingImages] = useState([]);
@@ -17,18 +16,18 @@ const ImageUploader = () => {
       setPendingImages(JSON.parse(storedPendingImages));
     }
 
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8080/admin/getCategories');
+        const categories = response.data.categories;
+        setCategories(categories);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
     fetchCategories();
   }, []);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get('http://127.0.0.1:8080/admin/getCategories');
-      console.log(response);
-      setCategories(response.data);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  };
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -41,20 +40,15 @@ const ImageUploader = () => {
     setSelectedOption1(event.target.value);
   };
 
-  const handleDropdownChange2 = (event) => {
-    setSelectedOption2(event.target.value);
-  };
-
   const handleNumberChange = (event) => {
     setNumber(event.target.value);
   };
 
   const handleSubmit = async () => {
-    if (image && (selectedOption1 || selectedOption2) && number) {
+    if (image && selectedOption1 && number) {
       const formData = new FormData();
       formData.append('photo', image);
       formData.append('category', selectedOption1);
-      formData.append('product_name', selectedOption2);
       formData.append('availability', number);
       formData.append('approval_sub', 'false');
       formData.append('approval_master', 'false');
@@ -69,7 +63,7 @@ const ImageUploader = () => {
         if (response.status === 200) {
           const newPendingImage = {
             image: URL.createObjectURL(image),
-            options: [selectedOption1, selectedOption2],
+            options: [selectedOption1],
             number: number,
             status: 'pending',
           };
@@ -79,7 +73,6 @@ const ImageUploader = () => {
 
           setImage(null);
           setSelectedOption1('');
-          setSelectedOption2('');
           setNumber('');
           setUploadMessage('Image uploaded and sent for approval.');
         } else {
@@ -95,64 +88,41 @@ const ImageUploader = () => {
   };
 
   return (
-    <div className="container">
-      <div className="sidebar">
-        <h2>Status Bar</h2>
-        <div className="status-column">
-          <h3>Unapproved</h3>
-        </div>
-        <div className="status-column">
-          <h3>Pending</h3>
-          {pendingImages.map((pendingImage, index) => (
-            <div key={index} className="pending-image">
-              <img src={pendingImage.image} alt="Pending" />
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="upload-content">
-        <div className="upload-dropdown">
-          <input type="file" accept="image/*" onChange={handleImageUpload} />
-          <div>
-          <div>
-            <label htmlFor="options1">Option 1:</label>
-            <select id="options1" value={selectedOption1} onChange={handleDropdownChange1}>
-                <option value="" disabled>Select an option</option>
-                {Array.isArray(categories) && categories.length > 0 && categories.map((category) => (
-                <option key={category._id} value={category.name}>
-                    {category.name}
+    <>
+      <div className="upload-dropdown">
+        <input type="file" accept="image/*" onChange={handleImageUpload} />
+        <div>
+          <label htmlFor="options1">Option 1:</label>
+          <select id="options1" value={selectedOption1} onChange={handleDropdownChange1}>
+            <option value="" disabled>
+              Select a category
+            </option>
+            {Array.isArray(categories) &&
+              categories.map((category) => (
+                <option key={category._id} value={category._id}>
+                  {category.name}
                 </option>
-                ))}
-            </select>
-            </div>
-          </div>
-          <div>
-            <label htmlFor="options2">Option 2:</label>
-            <select id="options2" value={selectedOption2} onChange={handleDropdownChange2}>
-              <option value="" disabled>Select an option</option>
-              <option value="Product 1">Product 1</option>
-              <option value="Product 2">Product 2</option>
-            </select>
-          </div>
-          <div>
-            <label htmlFor="number">Enter a number:</label>
-            <input
-              type="number"
-              id="number"
-              value={number}
-              onChange={handleNumberChange}
-              placeholder="Enter a number"
-            />
-          </div>
+              ))}
+          </select>
         </div>
-        <button onClick={handleSubmit}>Submit</button>
-        {uploadMessage && (
-          <div className="upload-message">
-            {uploadMessage}
-          </div>
-        )}
+        <div>
+          <label htmlFor="number">Enter a number:</label>
+          <input
+            type="number"
+            id="number"
+            value={number}
+            onChange={handleNumberChange}
+            placeholder="Enter a number"
+          />
+        </div>
       </div>
-    </div>
+      <button onClick={handleSubmit}>Submit</button>
+      {uploadMessage && (
+        <div className="upload-message">
+          {uploadMessage}
+        </div>
+      )}
+    </>
   );
 };
 
