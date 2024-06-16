@@ -1,8 +1,5 @@
 import React from 'react';
 import Navbar from '../../src/components/navbar';
-import { Swiper, SwiperSlide } from 'swiper/react';
-
-import 'swiper/css';
 import './home.css'; 
 
 export default function Home() {

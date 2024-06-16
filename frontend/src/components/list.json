@@ -1,0 +1,59 @@
+{
+    "categories": [
+        {
+            "_id": "666d8449b3140d8caa7a92d9",
+            "name": "Terracotta Ornaments & Home Décor",
+            "product_id": [
+                "666de062d76b06edfac3afb6",
+                "666de073d76b06edfac3afba"
+            ],
+            "__v": 2
+        },
+        {
+            "_id": "666d8449b3140d8caa7a92da",
+            "name": "Macrame Based Handicraft",
+            "product_id": [
+                "666de082d76b06edfac3afbe",
+                "666de08dd76b06edfac3afc2"
+            ],
+            "__v": 2
+        },
+        {
+            "_id": "666d8449b3140d8caa7a92db",
+            "name": "Moonj Based Handicrafts",
+            "product_id": [
+                "666de099d76b06edfac3afc6",
+                "666de0a4d76b06edfac3afca"
+            ],
+            "__v": 2
+        },
+        {
+            "_id": "666d8449b3140d8caa7a92dc",
+            "name": "Banana Fiber based ornaments & Home Décor",
+            "product_id": [
+                "666de0b4d76b06edfac3afce",
+                "666de0c3d76b06edfac3afd2"
+            ],
+            "__v": 2
+        },
+        {
+            "_id": "666d8449b3140d8caa7a92dd",
+            "name": "Jute Bags & Allied Products",
+            "product_id": [
+                "666de0d0d76b06edfac3afd6",
+                "666de0dad76b06edfac3afda"
+            ],
+            "__v": 2
+        },
+        {
+            "_id": "666d88f1e514992a42e6bc4d",
+            "name": "Others",
+            "product_id": [
+                "666d8951e514992a42e6bc50",
+                "666d8984e514992a42e6bc54",
+                "666d9c454b9bd04d15966159"
+            ],
+            "__v": 3
+        }
+    ]
+}
